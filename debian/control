@@ -1,0 +1,12 @@
+Source: ros-hydro-sick-tim
+Section: misc
+Priority: extra
+Maintainer: Martin Günther <mguenthe@uos.de>
+Build-Depends: debhelper (>= 9.0.0), libusb-1.0-0-dev, ros-hydro-catkin, ros-hydro-diagnostic-updater, ros-hydro-driver-base, ros-hydro-dynamic-reconfigure, ros-hydro-sensor-msgs
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-hydro-sick-tim
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libusb-1.0-0, ros-hydro-diagnostic-updater, ros-hydro-driver-base, ros-hydro-dynamic-reconfigure, ros-hydro-sensor-msgs
+Description: A ROS driver for the SICK TiM series of laser scanners. Currently, the pacakge supports serveral types of TiM310 and TiM551 scanners.
