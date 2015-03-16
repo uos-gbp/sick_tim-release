@@ -1,3 +1,24 @@
+## sick_tim (indigo) - 0.0.4-0
+
+The packages in the `sick_tim` repository were released into the `indigo` distro by running `/usr/bin/bloom-release sick_tim --track indigo --rosdistro indigo` on `Mon, 16 Mar 2015 15:19:38 -0000`
+
+The `sick_tim` package was released.
+
+Version of package(s) in repository `sick_tim`:
+- upstream repository: https://github.com/uos/sick_tim
+- release repository: https://github.com/uos-gbp/sick_tim-release.git
+- rosdistro version: `0.0.3-0`
+- old version: `0.0.3-1`
+- new version: `0.0.4-0`
+
+Versions of tools used:
+- bloom version: `0.5.19`
+- catkin_pkg version: `0.2.7`
+- rosdep version: `0.11.2`
+- rosdistro version: `0.4.1`
+- vcstools version: `0.1.36`
+
+
 ## sick_tim (indigo) - 0.0.3-1
 
 The packages in the `sick_tim` repository were released into the `indigo` distro by running `/usr/bin/bloom-release sick_tim --track indigo --rosdistro indigo` on `Mon, 16 Mar 2015 15:16:21 -0000`
