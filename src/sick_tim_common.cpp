@@ -203,22 +203,9 @@ int SickTimCommon::loopOnce()
   }
 
   sensor_msgs::LaserScan msg;
-
-  /*
-   * datagrams are enclosed in <STX> (0x02), <ETX> (0x03) pairs
-   */
-  char* buffer_pos = (char*)receiveBuffer;
-  char *dstart, *dend;
-  while( (dstart = strchr(buffer_pos, 0x02)) && (dend = strchr(dstart + 1, 0x03)) )
-  {
-    size_t dlength = dend - dstart;
-    *dend = '\0';
-    dstart++;
-    int success = parser_->parse_datagram(dstart, dlength, config_, msg);
-    if (success == EXIT_SUCCESS)
-      diagnosticPub_->publish(msg);
-    buffer_pos = dend + 1;
-  }
+  int success = parser_->parse_datagram((char*)receiveBuffer, (size_t)actual_length, config_, msg);
+  if (success == EXIT_SUCCESS)
+    diagnosticPub_->publish(msg);
 
   return EXIT_SUCCESS; // return success to continue looping
 }
