@@ -1,3 +1,24 @@
+## sick_tim (jade) - 0.0.6-0
+
+The packages in the `sick_tim` repository were released into the `jade` distro by running `/usr/bin/bloom-release sick_tim --track jade --rosdistro jade --edit` on `Fri, 13 Nov 2015 14:36:03 -0000`
+
+The `sick_tim` package was released.
+
+Version of package(s) in repository `sick_tim`:
+- upstream repository: https://github.com/uos/sick_tim
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `0.0.6-0`
+
+Versions of tools used:
+- bloom version: `0.5.20`
+- catkin_pkg version: `0.2.10`
+- rosdep version: `0.11.4`
+- rosdistro version: `0.4.2`
+- vcstools version: `0.1.38`
+
+
 ## sick_tim (indigo) - 0.0.6-0
 
 The packages in the `sick_tim` repository were released into the `indigo` distro by running `/usr/bin/bloom-release sick_tim --track indigo --rosdistro indigo` on `Fri, 13 Nov 2015 14:28:56 -0000`
