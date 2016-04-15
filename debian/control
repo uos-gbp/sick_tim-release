@@ -1,0 +1,13 @@
+Source: ros-jade-sick-tim
+Section: misc
+Priority: extra
+Maintainer: Martin Günther <martin.guenther@dfki.de>
+Build-Depends: debhelper (>= 9.0.0), libusb-1.0-0-dev, ros-jade-catkin, ros-jade-diagnostic-updater, ros-jade-driver-base, ros-jade-dynamic-reconfigure, ros-jade-roscpp, ros-jade-sensor-msgs
+Homepage: http://wiki.ros.org/sick_tim
+Standards-Version: 3.9.2
+
+Package: ros-jade-sick-tim
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libusb-1.0-0, ros-jade-diagnostic-updater, ros-jade-driver-base, ros-jade-dynamic-reconfigure, ros-jade-roscpp, ros-jade-sensor-msgs
+Description: A ROS driver for the SICK TiM series of laser scanners.
+ Currently, the package supports serveral types of TiM310, TiM551 and TiM571 scanners.
