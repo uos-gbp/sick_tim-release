@@ -89,17 +89,17 @@ int SickTim5512050001Parser::parse_datagram(char* datagram, size_t datagram_leng
         "received less fields than minimum fields (actual: %zu, minimum: %zu), ignoring scan", count, HEADER_FIELDS);
     ROS_WARN("are you using the correct node? (124 --> sick_tim310_1130000m01, > 33 --> sick_tim551_2050001, 580 --> sick_tim310s01, 592 --> sick_tim310)");
     // ROS_DEBUG("received message was: %s", datagram_copy);
-    return EXIT_FAILURE;
+    return ExitError;
   }
   if (strcmp(fields[15], "0"))
   {
     ROS_WARN("Field 15 of received data is not equal to 0 (%s). Unexpected data, ignoring scan", fields[15]);
-    return EXIT_FAILURE;
+    return ExitError;
   }
   if (strcmp(fields[20], "DIST1"))
   {
     ROS_WARN("Field 20 of received data is not equal to DIST1i (%s). Unexpected data, ignoring scan", fields[20]);
-    return EXIT_FAILURE;
+    return ExitError;
   }
 
   // More in depth checks: check data length and RSSI availability
@@ -110,12 +110,12 @@ int SickTim5512050001Parser::parse_datagram(char* datagram, size_t datagram_leng
   if (number_of_data < 1 || number_of_data > 811)
   {
     ROS_WARN("Data length is outside acceptable range 1-811 (%d). Ignoring scan", number_of_data);
-    return EXIT_FAILURE;
+    return ExitError;
   }
   if (count < HEADER_FIELDS + number_of_data)
   {
     ROS_WARN("Less fields than expected for %d data points (%zu). Ignoring scan", number_of_data, count);
-    return EXIT_FAILURE;
+    return ExitError;
   }
   ROS_DEBUG("Number of data: %d", number_of_data);
 
@@ -133,7 +133,7 @@ int SickTim5512050001Parser::parse_datagram(char* datagram, size_t datagram_leng
     if (number_of_rssi_data != number_of_data)
     {
       ROS_WARN("Number of RSSI data is lower than number of range data (%d vs %d", number_of_data, number_of_rssi_data);
-      return EXIT_FAILURE;
+      return ExitError;
     }
 
     // Check if the total length is still appropriate.
@@ -141,7 +141,7 @@ int SickTim5512050001Parser::parse_datagram(char* datagram, size_t datagram_leng
     if (count < HEADER_FIELDS + number_of_data + number_of_rssi_data + 6)
     {
       ROS_WARN("Less fields than expected for %d data points (%zu). Ignoring scan", number_of_data, count);
-      return EXIT_FAILURE;
+      return ExitError;
     }
 
     if (strcmp(fields[rssi_idx + 1], "RSSI1"))
@@ -244,28 +244,33 @@ int SickTim5512050001Parser::parse_datagram(char* datagram, size_t datagram_leng
     msg.ranges[j - index_min] = range / 1000.0;
   }
 
-  if (rssi)
-  {
-    // 26 + n: RSSI data included
-
-    //   26 + n + 1 = RSSI Measured Data Contents (RSSI1)
-    //   26 + n + 2 = RSSI scaling factor (3F80000)
-    //   26 + n + 3 = RSSI Scaling offset (0000000)
-    //   26 + n + 4 = RSSI starting angle (equal to Range starting angle)
-    //   26 + n + 5 = RSSI angular step width (equal to Range angular step width)
-    //   26 + n + 6 = RSSI number of data (equal to Range number of data)
-    //   26 + n + 7 .. 26 + n + 7 + n - 1: RSSI_Data_1 .. RSSI_Data_n
-    //   26 + n + 7 + n .. 26 + n + 7 + n + 2 = unknown (but seems to be [0, 1, B] always)
-    //   26 + n + 7 + n + 2 .. count - 4 = device label
-    //   count - 3 .. count - 1 = unknown (but seems to be 0 always)
-    //   <ETX> (\x03)
-    msg.intensities.resize(index_max - index_min + 1);
-    size_t offset = 26 + number_of_data + 7;
-    for (int j = index_min; j <= index_max; ++j)
+  if (config.intensity) {
+    if (rssi)
     {
-      unsigned short intensity;
-      sscanf(fields[j + offset], "%hx", &intensity);
-      msg.intensities[j - index_min] = intensity;
+      // 26 + n: RSSI data included
+
+      //   26 + n + 1 = RSSI Measured Data Contents (RSSI1)
+      //   26 + n + 2 = RSSI scaling factor (3F80000)
+      //   26 + n + 3 = RSSI Scaling offset (0000000)
+      //   26 + n + 4 = RSSI starting angle (equal to Range starting angle)
+      //   26 + n + 5 = RSSI angular step width (equal to Range angular step width)
+      //   26 + n + 6 = RSSI number of data (equal to Range number of data)
+      //   26 + n + 7 .. 26 + n + 7 + n - 1: RSSI_Data_1 .. RSSI_Data_n
+      //   26 + n + 7 + n .. 26 + n + 7 + n + 2 = unknown (but seems to be [0, 1, B] always)
+      //   26 + n + 7 + n + 2 .. count - 4 = device label
+      //   count - 3 .. count - 1 = unknown (but seems to be 0 always)
+      //   <ETX> (\x03)
+      msg.intensities.resize(index_max - index_min + 1);
+      size_t offset = 26 + number_of_data + 7;
+      for (int j = index_min; j <= index_max; ++j)
+      {
+        unsigned short intensity;
+        sscanf(fields[j + offset], "%hx", &intensity);
+        msg.intensities[j - index_min] = intensity;
+      }
+    } else {
+      ROS_WARN_ONCE("Intensity parameter is enabled, but the scanner is not configured to send RSSI values! "
+       "Please read the section 'Enabling intensity (RSSI) output' here: http://wiki.ros.org/sick_tim.");
     }
   }
 
@@ -299,7 +304,7 @@ int SickTim5512050001Parser::parse_datagram(char* datagram, size_t datagram_leng
        expected_time_increment, msg.time_increment);
  }
 
-  return EXIT_SUCCESS;
+  return ExitSuccess;
 }
 
 void SickTim5512050001Parser::set_range_min(float min)
