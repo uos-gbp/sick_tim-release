@@ -1,3 +1,26 @@
+## sick_tim (kinetic) - 0.0.8-0
+
+The packages in the `sick_tim` repository were released into the `kinetic` distro by running `/usr/bin/bloom-release sick_tim --track kinetic --rosdistro kinetic` on `Mon, 25 Apr 2016 14:12:55 -0000`
+
+The `sick_tim` package was released.
+
+Version of package(s) in repository `sick_tim`:
+
+- upstream repository: https://github.com/uos/sick_tim
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `0.0.8-0`
+
+Versions of tools used:
+
+- bloom version: `0.5.21`
+- catkin_pkg version: `0.2.10`
+- rosdep version: `0.11.4`
+- rosdistro version: `0.4.7`
+- vcstools version: `0.1.38`
+
+
 ## sick_tim (jade) - 0.0.8-0
 
 The packages in the `sick_tim` repository were released into the `jade` distro by running `/usr/bin/bloom-release sick_tim --track jade --rosdistro jade` on `Mon, 25 Apr 2016 09:33:44 -0000`
