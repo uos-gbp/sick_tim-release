@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013, Osnabrück University
+ * Copyright (C) 2017, Osnabrück University
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,58 +26,46 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- *  Created on: 24.05.2012
- *
- *      Authors:
- *         Jochen Sprickerhof <jochen@sprickerhof.de>
- *         Martin Günther <mguenthe@uos.de>
- *
- * Based on the TiM communication example by SICK AG.
+ *      Author:
+ *         Sebastian Pütz <spuetz@uos.de>
  *
  */
 
-#include <sick_tim/sick_tim_common_usb.h>
-#include <sick_tim/sick_tim_common_mockup.h>
-#include <sick_tim/sick_tim310_1130000m01_parser.h>
+#ifndef SICK_MRS1000_COMMUNICATION_H
+#define SICK_MRS1000_COMMUNICATION_H
 
-int main(int argc, char **argv)
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <boost/asio.hpp>
+#include "sick_tim/scan_and_cloud_parser.h"
+#include "sick_tim_common_tcp.h"
+#include <sensor_msgs/point_cloud2_iterator.h>
+
+namespace sick_tim
 {
-  ros::init(argc, argv, "sick_tim310_1130000m01");
-  ros::NodeHandle nhPriv("~");
 
-  bool subscribe_datagram;
-  int device_number;
-  nhPriv.param("subscribe_datagram", subscribe_datagram, false);
-  nhPriv.param("device_number", device_number, 0);
+class SickMrs1000Communication : public SickTimCommonTcp
+{
+ public:
+  SickMrs1000Communication(const std::string &hostname,
+                           const std::string &port,
+                           int &timelimit,
+                           ScanAndCloudParser *parser);
+  virtual ~SickMrs1000Communication();
+  virtual int loopOnce();
 
-  sick_tim::SickTim3101130000M01Parser* parser = new sick_tim::SickTim3101130000M01Parser();
+ protected:
+  ros::NodeHandle nh_;
+  ros::Publisher cloud_pub_;
+  diagnostic_updater::DiagnosedPublisher<sensor_msgs::PointCloud2>
+      diagnosed_cloud_publisher_;
+  virtual int init_scanner();
+  ScanAndCloudParser *scan_and_cloud_parser_;
+};
 
-  sick_tim::SickTimCommon* s = NULL;
-
-  int result = sick_tim::ExitError;
-  while (ros::ok())
-  {
-    // Atempt to connect/reconnect
-    if (subscribe_datagram)
-      s = new sick_tim::SickTimCommonMockup(parser);
-    else
-      s = new sick_tim::SickTimCommonUsb(parser, device_number);
-    result = s->init();
-
-    while(ros::ok() && (result == sick_tim::ExitSuccess)){
-      ros::spinOnce();
-      result = s->loopOnce();
-    }
-
-    delete s;
-
-    if (result == sick_tim::ExitFatal)
-      return result;
-
-    if (ros::ok() && !subscribe_datagram)
-      ros::Duration(1.0).sleep(); // Only attempt USB connections once per second
-  }
-
-  delete parser;
-  return result;
 }
+
+/* namespace sick_tim */
+#endif /* SICK_MRS1000_COMMUNICATION_H */
+

@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sick_tim)/urdf/example.urdf.xacro'" />
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
-
-  <node name="sick_tim310_1130000m01" pkg="sick_tim" type="sick_tim310_1130000m01" respawn="false" output="screen">
+  <node name="sick_mrs1000" pkg="sick_tim" type="sick_mrs1000" respawn="false" output="screen">
     <!-- default values: -->
     <!--
       <param name="min_ang" type="double" value="-2.35619449019" />
@@ -15,6 +12,15 @@
       <param name="publish_datagram" type="bool" value="False" />
       <param name="subscribe_datagram" type="bool" value="false" />
       <param name="device_number" type="int" value="0" />
+      <param name="range_min" type="double" value="0.2" />
+      <param name="range_max" type="double" value="64.0" />
     -->
+
+    <!-- Older versions of the scanner firmware report an incorrect time_increment.
+         If you get a warning about time_increment, uncomment this. -->
+    <!-- <param name="time_increment" type="double" value="0.000061722" /> -->
+
+    <param name="hostname" type="string" value="192.168.0.1" />
+    <param name="port" type="string" value="2111" />
   </node>
 </launch>
