@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013, Osnabrück University
+ * Copyright (C) 2017, Osnabrück University
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,58 +26,44 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- *  Created on: 24.05.2012
- *
- *      Authors:
- *         Jochen Sprickerhof <jochen@sprickerhof.de>
- *         Martin Günther <mguenthe@uos.de>
- *
- * Based on the TiM communication example by SICK AG.
+ *      Author:
+ *         Sebastian Pütz <spuetz@uos.de>
  *
  */
 
-#include <sick_tim/sick_tim_common_usb.h>
-#include <sick_tim/sick_tim_common_mockup.h>
-#include <sick_tim/sick_tim310_1130000m01_parser.h>
 
-int main(int argc, char **argv)
+#ifndef SICK_MRS1000_PARSER_H_
+#define SICK_MRS1000_PARSER_H_
+
+#include "sick_tim/scan_and_cloud_parser.h"
+#include <sensor_msgs/point_cloud2_iterator.h>
+
+namespace sick_tim
 {
-  ros::init(argc, argv, "sick_tim310_1130000m01");
-  ros::NodeHandle nhPriv("~");
 
-  bool subscribe_datagram;
-  int device_number;
-  nhPriv.param("subscribe_datagram", subscribe_datagram, false);
-  nhPriv.param("device_number", device_number, 0);
+class SickMRS1000Parser : public ScanAndCloudParser
+{
+ public:
+  SickMRS1000Parser();
+  virtual ~SickMRS1000Parser();
 
-  sick_tim::SickTim3101130000M01Parser* parser = new sick_tim::SickTim3101130000M01Parser();
+  virtual int parse_datagram(char* datagram, size_t datagram_length, SickTimConfig &config,
+                             sensor_msgs::LaserScan &scan, sensor_msgs::PointCloud2& cloud);
 
-  sick_tim::SickTimCommon* s = NULL;
+  void set_range_min(float min);
+  void set_range_max(float max);
+  void set_time_increment(float time);
 
-  int result = sick_tim::ExitError;
-  while (ros::ok())
-  {
-    // Atempt to connect/reconnect
-    if (subscribe_datagram)
-      s = new sick_tim::SickTimCommonMockup(parser);
-    else
-      s = new sick_tim::SickTimCommonUsb(parser, device_number);
-    result = s->init();
+  sensor_msgs::PointCloud2 cloud_;
+  sensor_msgs::PointCloud2Modifier modifier_;
+  sensor_msgs::PointCloud2Iterator<float> x_iter, y_iter, z_iter;
 
-    while(ros::ok() && (result == sick_tim::ExitSuccess)){
-      ros::spinOnce();
-      result = s->loopOnce();
-    }
+ private:
+  int layer_count_;
+  sick_tim::SickTimConfig current_config_;
+  float override_range_min_, override_range_max_;
+  float override_time_increment_;
+};
 
-    delete s;
-
-    if (result == sick_tim::ExitFatal)
-      return result;
-
-    if (ros::ok() && !subscribe_datagram)
-      ros::Duration(1.0).sleep(); // Only attempt USB connections once per second
-  }
-
-  delete parser;
-  return result;
-}
+} /* namespace sick_tim */
+#endif /* SICK_MRS1000_PARSER_H_ */
