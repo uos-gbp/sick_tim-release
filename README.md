@@ -1,3 +1,26 @@
+## sick_tim (kinetic) - 0.0.12-0
+
+The packages in the `sick_tim` repository were released into the `kinetic` distro by running `/usr/bin/bloom-release sick_tim --track kinetic --rosdistro kinetic` on `Wed, 31 Jan 2018 15:10:33 -0000`
+
+The `sick_tim` package was released.
+
+Version of package(s) in repository `sick_tim`:
+
+- upstream repository: https://github.com/uos/sick_tim
+- release repository: https://github.com/uos-gbp/sick_tim-release.git
+- rosdistro version: `0.0.11-0`
+- old version: `0.0.11-0`
+- new version: `0.0.12-0`
+
+Versions of tools used:
+
+- bloom version: `0.6.2`
+- catkin_pkg version: `0.4.1`
+- rosdep version: `0.11.8`
+- rosdistro version: `0.6.6`
+- vcstools version: `0.1.40`
+
+
 ## sick_tim (lunar) - 0.0.11-0
 
 The packages in the `sick_tim` repository were released into the `lunar` distro by running `/usr/bin/bloom-release sick_tim -t lunar --rosdistro lunar` on `Thu, 21 Dec 2017 11:24:11 -0000`
