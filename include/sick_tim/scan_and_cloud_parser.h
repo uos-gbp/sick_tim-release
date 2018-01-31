@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2013, Osnabrück University
+ * Copyright (C) 2017, Osnabrück University
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  *     * Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright
@@ -13,7 +13,7 @@
  *     * Neither the name of Osnabrück University nor the names of its
  *       contributors may be used to endorse or promote products derived from
  *       this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,58 +26,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- *  Created on: 24.05.2012
- *
- *      Authors:
- *         Jochen Sprickerhof <jochen@sprickerhof.de>
- *         Martin Günther <mguenthe@uos.de>
- *
- * Based on the TiM communication example by SICK AG.
+ *      Author: Sebastian Pütz <spuetz@uos.de>
  *
  */
 
-#include <sick_tim/sick_tim_common_usb.h>
-#include <sick_tim/sick_tim_common_mockup.h>
-#include <sick_tim/sick_tim310_1130000m01_parser.h>
+#ifndef SCAN_AND_CLOUD_PARSER_H_
+#define SCAN_AND_CLOUD_PARSER_H_
 
-int main(int argc, char **argv)
+#include "sick_tim/abstract_parser.h"
+#include <sensor_msgs/PointCloud2.h>
+
+namespace sick_tim
 {
-  ros::init(argc, argv, "sick_tim310_1130000m01");
-  ros::NodeHandle nhPriv("~");
 
-  bool subscribe_datagram;
-  int device_number;
-  nhPriv.param("subscribe_datagram", subscribe_datagram, false);
-  nhPriv.param("device_number", device_number, 0);
 
-  sick_tim::SickTim3101130000M01Parser* parser = new sick_tim::SickTim3101130000M01Parser();
+class ScanAndCloudParser : public AbstractParser
+{
+public:
+  ScanAndCloudParser();
+  virtual ~ScanAndCloudParser();
 
-  sick_tim::SickTimCommon* s = NULL;
+  virtual int parse_datagram(char* datagram, size_t datagram_length, SickTimConfig &config,
+                             sensor_msgs::LaserScan &scan, sensor_msgs::PointCloud2 &cloud) = 0;
 
-  int result = sick_tim::ExitError;
-  while (ros::ok())
-  {
-    // Atempt to connect/reconnect
-    if (subscribe_datagram)
-      s = new sick_tim::SickTimCommonMockup(parser);
-    else
-      s = new sick_tim::SickTimCommonUsb(parser, device_number);
-    result = s->init();
+  virtual int parse_datagram(char* datagram, size_t datagram_length, SickTimConfig &config,
+                             sensor_msgs::LaserScan &msg);
 
-    while(ros::ok() && (result == sick_tim::ExitSuccess)){
-      ros::spinOnce();
-      result = s->loopOnce();
-    }
+};
 
-    delete s;
-
-    if (result == sick_tim::ExitFatal)
-      return result;
-
-    if (ros::ok() && !subscribe_datagram)
-      ros::Duration(1.0).sleep(); // Only attempt USB connections once per second
-  }
-
-  delete parser;
-  return result;
-}
+} /* namespace sick_tim */
+#endif /* SCAN_AND_CLOUD_PARSER_H_ */
