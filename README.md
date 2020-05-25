@@ -1,3 +1,26 @@
+## sick_tim (melodic) - 0.0.17-1
+
+The packages in the `sick_tim` repository were released into the `melodic` distro by running `/usr/bin/bloom-release sick_tim -r melodic -y` on `Mon, 25 May 2020 17:40:10 -0000`
+
+The `sick_tim` package was released.
+
+Version of package(s) in repository `sick_tim`:
+
+- upstream repository: https://github.com/uos/sick_tim
+- release repository: https://github.com/uos-gbp/sick_tim-release.git
+- rosdistro version: `0.0.16-1`
+- old version: `0.0.16-1`
+- new version: `0.0.17-1`
+
+Versions of tools used:
+
+- bloom version: `0.9.7`
+- catkin_pkg version: `0.4.20`
+- rosdep version: `0.19.0`
+- rosdistro version: `0.8.1`
+- vcstools version: `0.1.42`
+
+
 ## sick_tim (kinetic) - 0.0.17-1
 
 The packages in the `sick_tim` repository were released into the `kinetic` distro by running `/usr/bin/bloom-release sick_tim -r kinetic -y` on `Mon, 25 May 2020 16:40:11 -0000`
