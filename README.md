@@ -1,3 +1,26 @@
+## sick_tim (noetic) - 0.0.17-1
+
+The packages in the `sick_tim` repository were released into the `noetic` distro by running `/usr/bin/bloom-release sick_tim -r noetic --track noetic --edit` on `Mon, 25 May 2020 17:45:05 -0000`
+
+The `sick_tim` package was released.
+
+Version of package(s) in repository `sick_tim`:
+
+- upstream repository: https://github.com/uos/sick_tim
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `0.0.17-1`
+
+Versions of tools used:
+
+- bloom version: `0.9.7`
+- catkin_pkg version: `0.4.20`
+- rosdep version: `0.19.0`
+- rosdistro version: `0.8.1`
+- vcstools version: `0.1.42`
+
+
 ## sick_tim (melodic) - 0.0.17-1
 
 The packages in the `sick_tim` repository were released into the `melodic` distro by running `/usr/bin/bloom-release sick_tim -r melodic -y` on `Mon, 25 May 2020 17:40:10 -0000`
