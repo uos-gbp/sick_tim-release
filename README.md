@@ -1,3 +1,26 @@
+## sick_tim (noetic) - 0.0.18-1
+
+The packages in the `sick_tim` repository were released into the `noetic` distro by running `/usr/bin/bloom-release --track noetic --ros-distro noetic sick_tim` on `Tue, 02 May 2023 13:45:15 -0000`
+
+The `sick_tim` package was released.
+
+Version of package(s) in repository `sick_tim`:
+
+- upstream repository: https://github.com/uos/sick_tim
+- release repository: https://github.com/uos-gbp/sick_tim-release.git
+- rosdistro version: `0.0.17-1`
+- old version: `0.0.17-1`
+- new version: `0.0.18-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.2`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## sick_tim (noetic) - 0.0.17-1
 
 The packages in the `sick_tim` repository were released into the `noetic` distro by running `/usr/bin/bloom-release sick_tim -r noetic --track noetic --edit` on `Mon, 25 May 2020 17:45:05 -0000`
